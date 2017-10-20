@@ -1,4 +1,7 @@
-# Astar.py, April 2017 
+"""Ken Lo
+UWNetID: thlo
+HW 3 Part II - 2"""
+# Astar.py, April 2017
 # Based on ItrDFS.py, Ver 0.4a, October 14, 2017.
 
 # A* Search of a problem space.
