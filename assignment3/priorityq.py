@@ -40,3 +40,8 @@ class PriorityQ:
     return 'PriorityQ'+str(self.h.d)
 
   
+pq = PriorityQ()
+pq.insert('a1', 1)
+pq.insert('a2', 2)
+print(pq.deletemin()[0])
+print(pq.deletemin())

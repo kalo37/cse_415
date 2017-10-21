@@ -85,6 +85,17 @@ class Operator:
     def apply(self, s):
         return self.state_transf(s)
 
+def h_euclidean(s):
+    pass
+
+def h_hamming(s):
+    pass
+
+def h_manhattan(s):
+    pass
+
+def h_custom(s):
+    pass
 # </COMMON_CODE>
 
 #<OPERATORS>
@@ -115,3 +126,5 @@ GOAL_TEST = lambda s: goal_test(s)
 #<GOAL_MESSAGE_FUNCTION> (optional)
 GOAL_MESSAGE_FUNCTION = lambda s: goal_message(s)
 #</GOAL_MESSAGE_FUNCTION>
+
+HEURISTICS = {'h_euclidean': h_euclidean, 'h_haaming': h_hamming, 'h_manhattan': h_manhattan, 'h_custom': h_custom}

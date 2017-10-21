@@ -58,7 +58,8 @@ def AStar(initial_state):
     OPEN = PriorityQ()
     CLOSED = []
     BACKLINKS[initial_state] = None
-    
+
+    OPEN.insert(initial_state, heuristics(initial_state))
     
     while not OPEN.empty():
         S = OPEN.deletemin()
@@ -75,6 +76,42 @@ def AStar(initial_state):
 
         # TODO: finish A* implementation
 
+        COUNT += 1
+        # if (COUNT % 32)==0:
+        if True:
+            # print(".",end="")
+            # if (COUNT % 128)==0:
+            if True:
+                print("COUNT = " + str(COUNT))
+                print("len(OPEN)=" + str(len(OPEN)))
+                print("len(CLOSED)=" + str(len(CLOSED)))
+        L = []
+        for op in Problem.OPERATORS:
+            if op.precond(S[0]):
+                new_state = op.state_transf(S[0])
+                if not occurs_in(new_state, CLOSED):
+                    L.append(new_state)
+                    BACKLINKS[new_state] = S[0]
+                    # print(Problem.DESCRIBE_STATE(new_state))
+
+        for s2 in L:
+            if s2 in OPEN:
+                OPEN.remove(s2)
+
+        for elt in L:
+            OPEN.insert(elt, heuristics(elt) + S[1])
+        print_state_list("OPEN", OPEN)
+
+def occurs_in(s1, lst):
+    for s2 in lst:
+        if s1 == s2: return True
+    return False
+
+def print_state_list(name, lst):
+  print(name+" is now: ",end='')
+  for s in lst[:-1]:
+    print(str(s),end=', ')
+  print(str(lst[-1]))
 
 # DO NOT CHANGE
 def backtrace(S):
