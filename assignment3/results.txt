@@ -5,10 +5,10 @@
 
 
 
-Puzzle    10a                                    12a                          14a                               16a
+Puzzle          10a                                    12a                          14a                               16a
 Heuristics
 euclidean       Solved/30 States              Solved/30 States              Solved/144 States               Solved/796 states
 hamming         Solved/77 States              Solved/16 States              Solved/533 States               Solved/1491 States
-manhattan       Solved/2481 States            Solved/957 States             Aborted after 30 seconds        Aborted after 30 seconds
+manhattan       Solved/21 States            Solved/34 States                Solved/160 states               Solved/444 states
 custom          Solved/171 States             Solved/33 States              Solved/1457 States              Solved/3709 States
 

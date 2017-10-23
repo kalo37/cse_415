@@ -85,6 +85,7 @@ class Operator:
         return self.state_transf(s)
 
 def h_euclidean(s):
+    print('euclidean')
     hsum = 0
     for tile in s.l:
         hor_d = s.l.index(tile) % 3 - tile % 3
@@ -95,6 +96,7 @@ def h_euclidean(s):
 
 
 def h_hamming(s):
+    print('hamming')
     hsum = 0
     for tile in s.l:
         if s.l.index(tile) != tile:
@@ -103,17 +105,18 @@ def h_hamming(s):
 
 
 def h_manhattan(s):
+    print('manhattan')
     hsum = 0
     for tile in s.l:
-        hor_d = s.l.index(tile) % 3 - tile % 3
-        ver_d = int(s.l.index(tile) / 3) - int(tile / 3)
+        hor_d = abs(s.l.index(tile) % 3 - tile % 3)
+        ver_d = abs(int(s.l.index(tile) / 3) - int(tile / 3))
         d_man = hor_d + ver_d
         hsum += d_man
     return hsum
 
 def h_custom(s):
     '''Count how many tiles out of rows or out of columns, 0.5 if only either one'''
-
+    print('h_custom')
     hsum = 0
     for tile in s.l:
         if s.l.index(tile) % 3 != tile % 3:
