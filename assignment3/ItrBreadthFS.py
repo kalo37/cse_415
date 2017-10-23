@@ -1,5 +1,4 @@
-"""Ken Lo
-UWNetID: thlo
+"""Ken Lo UWNetID: thlo
 HW 3 Part II - 1"""
 
 
@@ -89,7 +88,6 @@ def IterativeBFS(initial_state):
                     break
 
         OPEN = OPEN + L
-        #OPEN = L + OPEN
         print_state_list("OPEN", OPEN)
         print_state_list("CLOSED", CLOSED)
 

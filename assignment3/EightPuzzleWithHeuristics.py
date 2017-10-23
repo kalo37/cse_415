@@ -1,14 +1,14 @@
 """Ken Lo UWNetID: thlo
-HW 3 Part II - 4"""
+HW 3 Part II - 3"""
 
 #<METADATA>
 QUIET_VERSION = "0.2"
-PROBLEM_NAME = "Eight Puzzle"
+PROBLEM_NAME = "Eight Puzzle With Heuristics"
 PROBLEM_VERSION = "0.1"
 PROBLEM_AUTHORS = ['K. Lo']
 PROBLEM_CREATION_DATE = "18-OCT-2017"
 PROBLEM_DESC=\
-'''This formulation of the Eight Puzzle problem uses generic
+'''This formulation of the Eight Puzzle problem(with heuristics) uses generic
 Python 3 constructs and has been tested with Python 3.6.
 It is designed to work according to the QUIET2 tools interface.
 '''
@@ -83,6 +83,44 @@ class Operator:
 
     def apply(self, s):
         return self.state_transf(s)
+
+def h_euclidean(s):
+    hsum = 0
+    for tile in s.l:
+        hor_d = s.l.index(tile) % 3 - tile % 3
+        ver_d = int(s.l.index(tile) / 3) - int(tile / 3)
+        d_euc = (hor_d ** 2 + ver_d ** 2) ** 0.5
+        hsum += d_euc
+    return hsum
+
+
+def h_hamming(s):
+    hsum = 0
+    for tile in s.l:
+        if s.l.index(tile) != tile:
+            hsum += 1
+    return hsum
+
+
+def h_manhattan(s):
+    hsum = 0
+    for tile in s.l:
+        hor_d = s.l.index(tile) % 3 - tile % 3
+        ver_d = int(s.l.index(tile) / 3) - int(tile / 3)
+        d_man = hor_d + ver_d
+        hsum += d_man
+    return hsum
+
+def h_custom(s):
+    '''Count how many tiles out of rows or out of columns, 0.5 if only either one'''
+
+    hsum = 0
+    for tile in s.l:
+        if s.l.index(tile) % 3 != tile % 3:
+            hsum += 0.5
+        if int(s.l.index(tile) / 3) != int(tile / 3):
+            hsum += 0.5
+    return hsum
 # </COMMON_CODE>
 
 #<OPERATORS>
@@ -91,20 +129,20 @@ OPERATORS = [Operator("Move " + str(n),
                       # The default value construct is needed
                       # here to capture the values of p&q separately
                       # in each iteration of the list comp. iteration.
-                      lambda s, n1=n: s.move(n1))
+                      lambda s, n1=n: s.move(n1) )
              for n in list(range(1, 9))]
 #</OPERATORS>
 
 #<INITIAL_STATE>
-# puzzle0:
-#CREATE_INITIAL_STATE = lambda: State([0, 1, 2, 3, 4, 5, 6, 7, 8])
-# puzzle1a:
-#CREATE_INITIAL_STATE = lambda: State([1, 0, 2, 3, 4, 5, 6, 7, 8])
-# puzzle2a:
-#CREATE_INITIAL_STATE = lambda: State([3, 1, 2, 4, 0, 5, 6, 7, 8])
-# puzzle4a:
-CREATE_INITIAL_STATE = lambda: State([1, 4, 2, 3, 7, 0, 6, 8, 5])
-#</INITIAL_STATE>
+import sys
+
+if sys.argv == [''] or len(sys.argv) < 2:
+    CREATE_INITIAL_STATE = lambda: State([3, 1, 2, 4, 0, 5, 6, 7, 8])
+else:
+    import importlib
+    PUZZLE = importlib.import_module(sys.argv[3][:-3])
+    CREATE_INITIAL_STATE = PUZZLE.CREATE_INITIAL_STATE
+#</INITIAL STATE>
 
 #<GOAL_TEST> (optional)
 GOAL_TEST = lambda s: goal_test(s)
@@ -114,3 +152,4 @@ GOAL_TEST = lambda s: goal_test(s)
 GOAL_MESSAGE_FUNCTION = lambda s: goal_message(s)
 #</GOAL_MESSAGE_FUNCTION>
 
+HEURISTICS = {'h_euclidean': h_euclidean, 'h_hamming': h_hamming, 'h_manhattan': h_manhattan, 'h_custom': h_custom}
