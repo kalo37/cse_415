@@ -19,11 +19,11 @@ HW 3 Part II - 3"""
 import sys
 from priorityq import PriorityQ
 
-# DO NOT CHANGE THIS SECTION 
+# DO NOT CHANGE THIS SECTION
 if sys.argv==[''] or len(sys.argv)<2:
     import EightPuzzleWithHeuristics as Problem
     heuristics = lambda s: Problem.HEURISTICS['h_custom'](s)
-    
+
 else:
     import importlib
     Problem = importlib.import_module(sys.argv[1])
@@ -58,14 +58,14 @@ def AStar(initial_state):
     g = {initial_state: 0}
 
     OPEN.insert(initial_state, heuristics(initial_state))
-    
+
     while not len(OPEN) == 0:
         S, f = OPEN.deletemin()
         while S in CLOSED:
             S, f = OPEN.deletemin()
         CLOSED.append(S)
-        
-        # DO NOT CHANGE THIS SECTION: begining 
+
+        # DO NOT CHANGE THIS SECTION: begining
         if Problem.GOAL_TEST(S):
             print(Problem.GOAL_MESSAGE_FUNCTION(S))
             path = backtrace(S)
@@ -110,7 +110,7 @@ def backtrace(S):
     for s in path:
         print(s)
     print("\nPath length = "+str(len(path)-1))
-    return path    
+    return path
 
 def print_state_list(name, lst):
   print(name+" is now: ",end='')
@@ -120,4 +120,3 @@ def print_state_list(name, lst):
 
 if __name__=='__main__':
     path, name = runAStar()
-
