@@ -90,7 +90,7 @@ def AStar(initial_state):
                 OPEN.remove(s2)
 
         for elt in L:
-            OPEN.insert(elt, heuristics(elt) + g[S])
+            OPEN.insert(elt, heuristics(elt) + g[elt])
 
 
 def occurs_in(s1, lst):

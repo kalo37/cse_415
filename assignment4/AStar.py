@@ -17,28 +17,32 @@ HW 3 Part II - 3"""
 # python3 AStar.py EightPuzzleWithHeuristics h_manhattan
 
 import sys
+
 from priorityq import PriorityQ
 
 # DO NOT CHANGE THIS SECTION
-if sys.argv==[''] or len(sys.argv)<2:
-    #import EightPuzzleWithHeuristics as Problem
-    #heuristics = lambda s: Problem.HEURISTICS['h_custom'](s)
+if sys.argv == [''] or len(sys.argv) < 2:
+    # import EightPuzzleWithHeuristics as Problem
+    # heuristics = lambda s: Problem.HEURISTICS['h_custom'](s)
     import person as Problem
+
     heuristics = lambda s: Problem.h(s)
 
 else:
     import importlib
+
     Problem = importlib.import_module(sys.argv[1])
     heuristics = lambda s: Problem.HEURISTICS[sys.argv[2]](s)
 
-
+print(__name__)
 print("\nWelcome to AStar")
 COUNT = None
 BACKLINKS = {}
 
+
 # DO NOT CHANGE THIS SECTION
 def runAStar():
-    #initial_state = Problem.CREATE_INITIAL_STATE(keyVal)
+    # initial_state = Problem.CREATE_INITIAL_STATE(keyVal)
     initial_state = Problem.CREATE_INITIAL_STATE()
     print("Initial State:")
     print(initial_state)
@@ -46,8 +50,9 @@ def runAStar():
     COUNT = 0
     BACKLINKS = {}
     path, name = AStar(initial_state)
-    print(str(COUNT)+" states examined.")
+    print(str(COUNT) + " states examined.")
     return path, name
+
 
 # A star search algorithm
 def AStar(initial_state):
@@ -100,6 +105,7 @@ def occurs_in(s1, lst):
         if s1 == s2: return True
     return False
 
+
 # DO NOT CHANGE
 def backtrace(S):
     global BACKLINKS
@@ -111,14 +117,15 @@ def backtrace(S):
     print("Solution path: ")
     for s in path:
         print(s)
-    print("\nPath length = "+str(len(path)-1))
+    print("\nPath length = " + str(len(path) - 1))
     return path
 
-def print_state_list(name, lst):
-  print(name+" is now: ",end='')
-  for s in lst[:-1]:
-    print(str(s),end=', ')
-  print(str(lst[-1]))
 
-if __name__=='__main__':
+def print_state_list(name, lst):
+    print(name + " is now: ", end='')
+    for s in lst[:-1]:
+        print(str(s), end=', ')
+        print(str(lst[-1]))
+
+if __name__ == '__main__':
     path, name = runAStar()

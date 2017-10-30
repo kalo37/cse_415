@@ -29,7 +29,7 @@ COUNT = None
 BACKLINKS = {}
 
 #DO NOT CHANGE THIS FUNCTION
-def runBFS(): 
+def runBFS():
   initial_state = Problem.CREATE_INITIAL_STATE()
   print("Initial State:")
   print(initial_state)
@@ -62,7 +62,7 @@ def IterativeBFS(initial_state):
             return path, Problem.PROBLEM_NAME
 
         # DO NOT CHANGE THE CODE ABOVE 
-        
+
         # TODO: finish BFS implementation
         COUNT += 1
 
@@ -98,7 +98,7 @@ def IterativeBFS(initial_state):
 # DO NOT CHANGE
 def backtrace(S):
   global BACKLINKS
-  path = [] 
+  path = []
   while S:
     path.append(S)
     S = BACKLINKS[S]

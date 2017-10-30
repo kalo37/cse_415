@@ -11,36 +11,35 @@ of A* in Python.
 '''
 from heapdict import heapdict
 
+
 class PriorityQ:
-  def __init__(self):
-    self.h = heapdict()
+    def __init__(self):
+        self.h = heapdict()
 
-  def insert(self, elt, priority):
-    if elt in self.h:
-      raise Exception("Key is already in the priority queue: "+str(elt))
-    self.h[elt] = priority
+    def insert(self, elt, priority):
+        if elt in self.h:
+            raise Exception("Key is already in the priority queue: " + str(elt))
+        self.h[elt] = priority
 
-  def deletemin(self):
-    # Returns the element having smallest priority value.
-    return self.h.popitem()
+    def deletemin(self):
+        # Returns the element having smallest priority value.
+        return self.h.popitem()
 
-  def remove(self, elt):
-    # Removes an arbitrary element from the priority queue.
-    # This allows updating a priority value for a key by
-    # first removing it and then inserting it again with its
-    # new priority value.
-    del self.h[elt]  # invokes the __delitem__ method of heapdict.
+    def remove(self, elt):
+        # Removes an arbitrary element from the priority queue.
+        # This allows updating a priority value for a key by
+        # first removing it and then inserting it again with its
+        # new priority value.
+        del self.h[elt]  # invokes the __delitem__ method of heapdict.
 
-  def getpriority(self, elt):
-    return self.h[elt]
+    def getpriority(self, elt):
+        return self.h[elt]
 
-  def __len__(self):
-    return len(self.h)
+    def __len__(self):
+        return len(self.h)
 
-  def __contains__(self, elt):
-    return elt in self.h
+    def __contains__(self, elt):
+        return elt in self.h
 
-  def __str__(self):
-    return 'PriorityQ'+str(self.h.d)
-
-  
+    def __str__(self):
+        return 'PriorityQ' + str(self.h.d)
