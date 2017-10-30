@@ -142,27 +142,47 @@ def get_a():
 
 
 """
+To get new state from previous state,
+first we have a random variable a from 0.01 to 1,
+when doing 'pos' operator, a = a + 0.2,
+and when doing 'neg' operator, a = a - 0.2.
+For either operator,
+new interest = old interest + V,
+where V = freq. / (10 * satis.) * interest * (2 * a - 1) - 0.01
+
+
+
 Example 1: 
 goal: {'interest': 0.7, 'satisfaction': 3, 'frequency': 5}
+
 init: {'interest': 0.5, 'satisfaction': 4, 'frequency': 2}
 h(init): 1.2
 assuming a = 0.21
+
 after 'pos' operator,
+V = 2 / (10 * 4) * 0.5 * (2 * (0.21+0.2) - 1) - 0.01 = -0.0245
 pos: {'interest': 0.4755, 'satisfaction': 5, 'frequency': 3}
-h(pos): 2.224
+h(pos): (0.7 - 0.4755) + (5 - 3) 2 = 2.224
+
 after 'neg' operator,
+V = 2 / (10 * 4) * 0.5 * (2 * (0.21-0.2) - 1) - 0.01 = -0.0345
 neg: {'interest': 0.4655, 'satisfaction': 3, 'frequency': 1}
-h(neg): 0.234
+h(neg): (0.7 - 0.465) + (3 - 3) = 0.234
 
 Example 2:
 goal: {'interest': 0.3, 'satisfaction': 2, 'frequency': 3}
+
 init: {'interest': 0.6, 'satisfaction': 2, 'frequency': 5}
-h(init): 0.3
+h(init): (0.6 - 0.3) + (2 - 2) = 0.3
 assuming a = 0.34
+
 after 'pos' operator,
+V = 5 / (10 * 2) * 0.6 * (2 * (0.34+0.2) - 1) - 0.01 = 0.002
 pos: {'interest': 0.6002, 'satisfaction': 3, 'frequency': 6}
-h(pos): 1.3002
+h(pos): (0.6002 - 0.3) + (3 - 2) = 1.3002
+
 after 'neg' operator,
+V = 5 / (10 * 2) * 0.6 * (2 * (0.34-0.2) - 1) - 0.01 = -0.118
 neg: {'interest': 0.482, 'satisfaction': 1, 'frequency': 4}
-h(neg): 1.182
+h(neg): (0.482 - 0.3) + (2 - 1) = 1.182
 """
