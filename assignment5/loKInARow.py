@@ -2,7 +2,21 @@
 CSE 415 HW 5
 K In A Row agent"""
 
+INITIAL_STATE = None
+K = None
+MY_SIDE = None
+OPP_NICKNAME = None
+
 def prepare(initial_state, k, what_side_I_play, opponent_nickname):
+    global INITIAL_STATE
+    INITIAL_STATE = initial_state
+    global K
+    K = k
+    global MY_SIDE
+    MY_SIDE = what_side_I_play
+    global OPP_NICKNAME
+    OPP_NICKNAME = opponent_nickname
+
     return "OK"
 
 def introduce():
