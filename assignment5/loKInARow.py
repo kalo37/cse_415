@@ -38,27 +38,53 @@ def makeMove(currentState, currentRemark, timeLimit=10000):
 
 def staticEval(state):
     board = state[0]
-    m = len(board)
-    n = len(board[0])
+    m = len(board) # num of rows
+    n = len(board[0]) # num of cols
     my_score = 0
     opp_score = 0
 
     #check horizontal
     for hor in board:
-        try:
-            hor_removed = hor.remove('-')
-        except ValueError:
-            hor_removed = hor
-        my_needed_to_win = testCanWin(hor_removed, MY_SIDE)
-        opp_needed_to_win = testCanWin(hor_removed, OPP_SIDE)
+        my_needed_to_win = testCanWin(hor, MY_SIDE)
+        opp_needed_to_win = testCanWin(hor, OPP_SIDE)
         if my_needed_to_win > 0:
             my_score += 10 ** (K - my_needed_to_win)
         if opp_needed_to_win > 0:
             opp_score += 10 ** (K - opp_needed_to_win)
 
-    #TODO check vertical
 
-    #TODO check diagonal
+        #TODO check if working
+    for i in range(0, n):
+        temp = []
+        for j in range(0, m):
+            temp.append(board[j][i])
+        my_needed_to_win = testCanWin(temp, MY_SIDE)
+        opp_needed_to_win = testCanWin(temp, OPP_SIDE)
+        if my_needed_to_win > 0:
+            my_score += 10 ** (K - my_needed_to_win)
+        if opp_needed_to_win > 0:
+            opp_score += 10 ** (K - opp_needed_to_win)
+
+
+    #TODO check \
+    temp = []
+    for i in range(0, n):
+        try:
+            temp.append(board[i][i])
+        except:
+            pass
+    my_needed_to_win = testCanWin(temp, MY_SIDE)
+    opp_needed_to_win = testCanWin(temp, OPP_SIDE)
+    if my_needed_to_win > 0:
+        my_score += 10 ** (K - my_needed_to_win)
+    if opp_needed_to_win > 0:
+        opp_score += 10 ** (K - opp_needed_to_win)
+
+    #TODO check /
+    
+
+
+
 
     return my_score - opp_score
 
@@ -67,6 +93,13 @@ def staticEval(state):
 def testCanWin(row, side):
     """return the minimum number of moves needed for the player of "side" to win the row,
                                     return -1 if the player cannot win the row"""
+
+
+    try:
+        row = row.remove('-')
+    except ValueError:
+        pass
+
     win_steps_list = []
     for i, cell in enumerate(row):
         needed_to_win = 0
@@ -97,6 +130,10 @@ def testCanWin(row, side):
     else:
         return -1
 
+#0,0; 1,1; 2,2
+#1,0; 2,1; 3,2
+#0,1; 1,2; 2,3
+#2,0
 
 INITIAL_STATE = \
               [[[' ',' ',' '],
