@@ -4,8 +4,8 @@
 
 USE_HTML = True
 
-import Hobgoblin as player1
-import Player as player2
+import aarya22KInARow as player1
+import thloKInARow as player2
 from winTesterForK import winTesterForK
 
 if USE_HTML: import gameToHTML
@@ -32,6 +32,7 @@ K = 5
 GAME_TYPE = "Five in a Row on Seven-by-Seven Board with Corners Forbidden"
 
 INITIAL_STATE = FIVE_INITIAL_STATE
+#INITIAL_STATE = TTT_INITIAL_STATE
 
 TIME_PER_MOVE = 10
 

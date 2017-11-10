@@ -65,14 +65,13 @@ import math
 
 
 def makeMove(currentState, currentRemark, timeLimit=10000):
-    depth = 10
+    depth = 3
     v, move = topMaxMove(currentState, depth, -math.inf, math.inf)
     i = move[0]
     j = move[1]
     newState = list(currentState)
     newState[0][i][j] = MY_SIDE
-    newRemark = 'remark'
-
+    newRemark = '2'
     return [[move, newState], newRemark]
 
 
@@ -103,7 +102,7 @@ def getMin(state, depth, alpha, beta):
     if depth == 0 or is_terminal_state(state, h):
         return h
     v = math.inf
-    for s, move in getNextMoves(state, OPP_SIDE):
+    for s, move in getNextMoves(state, MY_SIDE):
         v = min(v, getMax(s, depth - 1, alpha, beta))
         beta = min(beta,v)
         if alpha >= beta:
