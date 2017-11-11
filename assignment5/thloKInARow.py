@@ -2,7 +2,8 @@
 CSE 415 HW 5
 K In A Row agent"""
 
-from random import randint
+import random
+import time
 
 INITIAL_STATE = None
 K = None
@@ -11,6 +12,8 @@ OPP_SIDE = None
 OPP_NICKNAME = None
 ZOBRISTNUM = []
 ZHASH_DICT = {}
+MOVE = 0
+
 
 def prepare(initial_state, k, what_side_I_play, opponent_nickname):
     global INITIAL_STATE
@@ -34,14 +37,16 @@ def prepare(initial_state, k, what_side_I_play, opponent_nickname):
     global ZOBRISTNUM
     m = len(initial_state[0])  # num of rows
     n = len(initial_state[0][0])
-    ZOBRISTNUM = [[0] * 2 for i in range(m*n)]
+    ZOBRISTNUM = [[0] * 2 for i in range(m * n)]
     for i in range(m):
         for j in range(2):
-            ZOBRISTNUM[i][j] = randint(0, 4294967296)
+            ZOBRISTNUM[i][j] = random.randint(0, 4294967296)
 
     return "OK"
 
+
 def zhash(board):
+    """hash function for the board"""
     val = 0
     flattened = [x for y in board for x in y]
     for i in range(0, len(flattened)):
@@ -61,55 +66,85 @@ def introduce():
 def nickname():
     return 'riqroq'
 
+
 import math
+
+UTTERANCES = ["You should go easy on me, I'm just a frog.", \
+              "Hmm, this should be good.", \
+              "Have you ever met a friendly frog like I am? I'm still going to win though!", \
+              "Have you ever been to China? I heard they eat frogs :S", \
+              "Croak. Croak. Croak.", \
+              "The dream of every frog is to become a prince."]
 
 
 def makeMove(currentState, currentRemark, timeLimit=10000):
-    depth = 3
-    v, move = topMaxMove(currentState, depth, -math.inf, math.inf)
-    i = move[0]
-    j = move[1]
-    newState = list(currentState)
-    newState[0][i][j] = MY_SIDE
-    newRemark = '2'
+    startTime = time.time()
+    global MOVE
+    MOVE += 1
+    if MOVE == 1:
+        newRemark = "Hello " + OPP_NICKNAME + ". Croak. Let's play a good game, show some good sportsFROGship."
+    else:
+        newRemark = random.choice(UTTERANCES)
+    v, newState, move = doSearch(currentState, timeLimit, startTime)
     return [[move, newState], newRemark]
 
 
+def timeCheck(startTime, timeLimit):
+    """check if time limit is approaching"""
+    return timeLimit - time.time() + startTime < 0.01
 
-def topMaxMove(state, depth, alpha, beta):
-    h = staticEval(state)
-    if depth == 0 or is_terminal_state(state, h):
-        return h
-    (v, move) = (-math.inf, None)
-    for s, move in getNextMoves(state, MY_SIDE):
-        (v, move) = max((v, move), (getMin(s, depth - 1, alpha, beta), move), key=lambda item: item[1])
-    return v, move
 
-def getMax(state, depth, alpha, beta):
+def doSearch(state, timeLimit, startTime):
+    """start alpha beta search, return the best move, its state and its value"""
+    depth = 1
+    children = getNextMoves(state, MY_SIDE)
+    beststate, bestmove = children[0]
+    bestV = getMin(beststate, depth, -math.inf, math.inf, startTime, timeLimit)
+    for childstate, childmove in children[1:]:
+        if timeCheck(startTime, timeLimit):
+            break
+        childV = getMin(childstate, depth, -math.inf, math.inf, startTime, timeLimit)
+        if childV > bestV:
+            beststate = childstate
+            bestmove = childmove
+            bestV = childV
+    return bestV, beststate, bestmove
+
+
+def getMax(state, depth, alpha, beta, startTime, timeLimit):
+    """get maximum value, with alpha beta pruning"""
     h = staticEval(state)
-    if depth == 0 or is_terminal_state(state, h):
+    if depth == 0 or is_terminal_state(state, h) or timeCheck(startTime, timeLimit):
         return h
     v = -math.inf
     for s, move in getNextMoves(state, MY_SIDE):
-        v = max(v, getMin(s, depth - 1, alpha, beta))
+        v = max(v, getMin(s, depth - 1, alpha, beta, startTime, timeLimit))
         alpha = max(alpha, v)
         if alpha >= beta:
             return alpha
     return v
 
-def getMin(state, depth, alpha, beta):
+
+def getMin(state, depth, alpha, beta, startTime, timeLimit):
+    """get min value, with alpha beta pruning"""
     h = staticEval(state)
-    if depth == 0 or is_terminal_state(state, h):
+    if depth == 0 or is_terminal_state(state, h) or timeCheck(startTime, timeLimit):
         return h
     v = math.inf
-    for s, move in getNextMoves(state, MY_SIDE):
-        v = min(v, getMax(s, depth - 1, alpha, beta))
-        beta = min(beta,v)
+    for s, move in getNextMoves(state, OPP_SIDE):
+        v = min(v, getMax(s, depth - 1, alpha, beta, startTime, timeLimit))
+        beta = min(beta, v)
         if alpha >= beta:
             return beta
     return v
 
+
 def getNextMoves(state, side):
+    """get all successors of "side" of the current state"""
+    if side == 'X':
+        nextside = 'O'
+    else:
+        nextside='X'
     s = state[0][:]
     board = [x[:] for x in s]
     moves = []
@@ -120,11 +155,12 @@ def getNextMoves(state, side):
                 moves.append((i, j))
                 temp = [x[:] for x in board]
                 temp[i][j] = side
-                new_states.append([temp, side])
-
+                new_states.append([temp, nextside])
     return list(zip(new_states, moves))
 
+
 def is_terminal_state(state, h):
+    """return true if state is a terminal state, false otherwise"""
     if h > (10 ** K) or h < -(10 ** K):
         return True
     for r in state[0]:
@@ -139,7 +175,7 @@ def staticEval(state):
     if zhash_value in ZHASH_DICT.keys():
         return ZHASH_DICT[zhash_value]
     else:
-        m = len(board) # num of rows
+        m = len(board)  # num of rows
         my_score = 0
         opp_score = 0
 
@@ -162,7 +198,6 @@ def staticEval(state):
                 my_score += (10 ** (K - my_needed_to_win))
             if opp_needed_to_win >= 0:
                 opp_score += (10 ** (K - opp_needed_to_win))
-
 
         def get_forward_diag():
             """get all forward diagonals, and return them if their lengths are larger than K"""
@@ -203,8 +238,6 @@ def staticEval(state):
         return total_score
 
 
-
-
 def testCanWin(row, side):
     """return the minimum number of moves needed for the player of "side" to win the row,
                                     return -1 if the player cannot win the row"""
@@ -239,13 +272,3 @@ def testCanWin(row, side):
         return min(win_steps_list)
     else:
         return -1
-
-#0,0; 1,1; 2,2
-#1,0; 2,1; 3,2
-#0,1; 1,2; 2,3
-#2,0
-
-INITIAL_STATE = \
-              [[['X','O',' '],
-                ['O','X',' '],
-                ['X','O','O']], "X"]
